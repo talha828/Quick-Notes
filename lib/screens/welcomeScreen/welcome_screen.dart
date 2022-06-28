@@ -58,8 +58,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ],
               ),
             ),
-            QuickButton(buttonText: buttonText,onTap: (){      Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.bottomToTopPop,childCurrent:WelcomeScreen(),duration: Duration(seconds: 1)));
-            },),
+            QuickButton(buttonText: buttonText,onTap: ()=>    Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.bottomToTopPop,childCurrent:WelcomeScreen(),duration: Duration(seconds: 1))),
+            ),
           ],
         ),
       ),

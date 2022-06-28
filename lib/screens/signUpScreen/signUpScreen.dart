@@ -61,9 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fill = true;
                 });
               },
-              onChange: (value) {
-                password = TextEditingController(text: value);
-              },
+              onChange: (value) =>password = TextEditingController(text: value),
             ),
             QuickTextField(
               text: "Password",
@@ -74,9 +72,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fill = true;
                 });
               },
-              onChange: (value) {
-                password = TextEditingController(text: value);
-              },
+              onChange: (value) =>password = TextEditingController(text: value),
             ),
             QuickTextField(
               text: "Confirm Password",
@@ -87,9 +83,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   fill = true;
                 });
               },
-              onChange: (value) {
-                password = TextEditingController(text: value);
-              },
+              onChange: (value)=>password = TextEditingController(text: value),
             ),
             QuickButton(
               buttonText: "Sign Up",
@@ -103,8 +97,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: notHaveAccountText
                 ),
                 InkWell(
-                    onTap: () {      Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeftPop,childCurrent:SignUpScreen(),duration: Duration(seconds: 1)));
-                    },
+                    onTap:()=>     Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.rightToLeftPop,childCurrent:SignUpScreen(),duration: Duration(seconds: 1))),
                     child: Text(
                         "Login in",
                         style: signUp

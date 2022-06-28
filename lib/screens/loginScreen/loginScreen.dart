@@ -52,9 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fill = true;
                 });
               },
-              onChange: (value) {
-                email = TextEditingController(text: value);
-              },
+              onChange: (value) =>email = TextEditingController(text: value),
             ),
             QuickTextField(
               text: "Password",
@@ -65,9 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fill = true;
                 });
               },
-              onChange: (value) {
-                password = TextEditingController(text: value);
-              },
+              onChange: (value) =>password = TextEditingController(text: value),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
@@ -90,8 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: notHaveAccountText
                 ),
                 InkWell(
-                    onTap: () {      Navigator.push(context, PageTransition(child: SignUpScreen(), type: PageTransitionType.leftToRight,duration: Duration(seconds: 1)));
-                    },
+                    onTap: ()=>     Navigator.push(context, PageTransition(child: SignUpScreen(), type: PageTransitionType.leftToRight,duration: Duration(seconds: 1))),
                     child: Text(
                       "Sign up",
                       style: signUp
