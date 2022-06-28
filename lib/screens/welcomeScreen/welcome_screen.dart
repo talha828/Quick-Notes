@@ -1,6 +1,8 @@
 import 'package:alert_dialog/alert_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:quick_notes/constant/constant.dart';
+import 'package:quick_notes/screens/loginScreen/loginScreen.dart';
 import 'package:quick_notes/widgets/quickButton.dart';
 
 class WelcomeScreen extends StatefulWidget {
@@ -56,7 +58,8 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ],
               ),
             ),
-            QuickButton(buttonText: buttonText,onTap: (){},),
+            QuickButton(buttonText: buttonText,onTap: (){      Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.bottomToTopPop,childCurrent:WelcomeScreen(),duration: Duration(seconds: 1)));
+            },),
           ],
         ),
       ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:quick_notes/constant/constant.dart';
+import 'package:quick_notes/screens/signUpScreen/signUpScreen.dart';
 import 'package:quick_notes/widgets/quickButton.dart';
 import 'package:quick_notes/widgets/quickTextField.dart';
 
@@ -88,7 +90,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: notHaveAccountText
                 ),
                 InkWell(
-                    onTap: () {},
+                    onTap: () {      Navigator.push(context, PageTransition(child: SignUpScreen(), type: PageTransitionType.leftToRight,duration: Duration(seconds: 1)));
+                    },
                     child: Text(
                       "Sign up",
                       style: signUp
