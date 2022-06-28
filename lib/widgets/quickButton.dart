@@ -16,7 +16,7 @@ class QuickButton extends StatelessWidget {
         padding: EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
             color: Color(0xff407BFF),
-            borderRadius: BorderRadius.circular(5)
+            borderRadius: BorderRadius.circular(10)
         ),
         child: Text(buttonText,style:quickButtonText),),
     );
