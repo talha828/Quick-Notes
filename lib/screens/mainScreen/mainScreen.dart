@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_notes/constant/constant.dart';
 import 'package:quick_notes/widgets/quickSearch.dart';
 import 'package:quick_notes/widgets/quickTextField.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -19,6 +22,33 @@ class _MainScreenState extends State<MainScreen> {
       _selectedIndex = index;
     });
   }
+  Future<bool> _onWillPop() async {
+    return (await showDialog(
+      context: context,
+      builder: (context) => new AlertDialog(
+        title: new Text('Are you sure?'),
+        content: new Text('Do you want to exit an App'),
+        actions: <Widget>[
+          new FlatButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: new Text(
+              'No',
+              style: TextStyle(color: Color(0xff407BFF)),
+            ),
+          ),
+          new FlatButton(
+            onPressed: () => exit(0),
+            child: new Text(
+              'Yes',
+              style: TextStyle(color: Color(0xff407BFF)),
+            ),
+          ),
+        ],
+      ),
+    )) ??
+        false;
+  }
+
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     HomeScreen(),
@@ -26,33 +56,36 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-        bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor:Color(0xff535353) ,
-        selectedItemColor:Color(0xff407BFF) ,
-        items: [
-          BottomNavigationBarItem(icon: Image.asset("assets/home.png",scale: 2,color:_selectedIndex==0?Color(0xff407BFF):Color(0xff535353)), title: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text('Home',style: TextStyle(color:_selectedIndex==0?Color(0xff407BFF):Color(0xff535353),fontSize: 10),),
-          ), ),
-          BottomNavigationBarItem(icon:Image.asset("assets/category.png", color:_selectedIndex==1?Color(0xff407BFF):Color(0xff535353),scale: 2,), title: Padding(
-            padding: const EdgeInsets.all(5.0),
-            child: Text('Category',style: TextStyle(fontSize:10,color: _selectedIndex==1?Color(0xff407BFF):Color(0xff535353),),),
-          ), ),
-        ],
-          type: BottomNavigationBarType.shifting,
-          currentIndex: _selectedIndex,
-          //selectedItemColor: Colors.black,
-          iconSize: 40,
-          onTap: _onItemTapped,
-          elevation: 5
+    return WillPopScope(
+      onWillPop: _onWillPop,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+          bottomNavigationBar: BottomNavigationBar(
+          unselectedItemColor:Color(0xff535353) ,
+          selectedItemColor:Color(0xff407BFF) ,
+          items: [
+            BottomNavigationBarItem(icon: Image.asset("assets/home.png",scale: 2,color:_selectedIndex==0?Color(0xff407BFF):Color(0xff535353)), title: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Text('Home',style: TextStyle(color:_selectedIndex==0?Color(0xff407BFF):Color(0xff535353),fontSize: 10),),
+            ), ),
+            BottomNavigationBarItem(icon:Image.asset("assets/category.png", color:_selectedIndex==1?Color(0xff407BFF):Color(0xff535353),scale: 2,), title: Padding(
+              padding: const EdgeInsets.all(5.0),
+              child: Text('Category',style: TextStyle(fontSize:10,color: _selectedIndex==1?Color(0xff407BFF):Color(0xff535353),),),
+            ), ),
+          ],
+            type: BottomNavigationBarType.shifting,
+            currentIndex: _selectedIndex,
+            //selectedItemColor: Colors.black,
+            iconSize: 40,
+            onTap: _onItemTapped,
+            elevation: 5
+        ),
+        body:Center(
+          child: _widgetOptions.elementAt(_selectedIndex),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add,size: 30,),backgroundColor: Color(0xff407BFF)),
       ),
-      body:Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: FloatingActionButton(onPressed: (){},child: Icon(Icons.add,size: 30,),backgroundColor: Color(0xff407BFF)),
     );
   }
 }

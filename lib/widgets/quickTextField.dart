@@ -5,14 +5,15 @@ class QuickTextField extends StatelessWidget {
   const QuickTextField(
       {required this.fill,
         this.onChange,
-        this.onTap,
         this.text,
-        this.controller});
+        this.controller,
+        this.obscureText
+      });
   final onChange;
-  final onTap;
   final bool fill;
   final text;
   final controller;
+  final obscureText;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class QuickTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           border: Border.all(color: Colors.black)),
       child: TextField(
-        onTap: onTap,
+        obscureText:obscureText ,
         onChanged: onChange,
         decoration: InputDecoration(
             fillColor: Color(0xffDCEAFF),
