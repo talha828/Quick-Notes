@@ -9,6 +9,7 @@ import 'package:quick_notes/screens/mainScreen/mainScreen.dart';
 import 'package:quick_notes/screens/signUpScreen/signUpScreen.dart';
 import 'package:quick_notes/widgets/quickButton.dart';
 import 'package:quick_notes/widgets/quickTextField.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -60,8 +61,11 @@ class _LoginScreenState extends State<LoginScreen> {
               );
             })
                 .then(
-                  (value) {
+                  (value)async {
                 setLoading(false);
+                SharedPreferences pref=await SharedPreferences.getInstance();
+                pref.setString("email", email);
+                pref.setString("password",password);
                 Navigator.push(
                     context,
                     PageTransition(

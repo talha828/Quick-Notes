@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,6 +7,7 @@ import 'package:quick_notes/constant/constant.dart';
 import 'package:quick_notes/widgets/quickSearch.dart';
 import 'package:quick_notes/widgets/quickTextField.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:sqflite/sqflite.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -48,11 +50,26 @@ class _MainScreenState extends State<MainScreen> {
         )) ??
         false;
   }
+  setDataBase()async{
+    Database  db = await openDatabase('aaa.db').catchError((e)=>print("error: $e"));
+        //await db.execute("create table talha (name varchar(50),id int);").catchError((e)=>print("error1: $e"));
+        await db.rawInsert("insert into talha values(?, ?)",["hamza",2]).catchError((e)=>print("error2: $e"));
+    List<Map> data= await db.rawQuery("select * from talha where id=?",[1]).catchError((e)=>print("error3: $e"));
+      for(var i in data){
+        print("name: ${i["name"]}");
+      }
 
+  }
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     HomeScreen(),
   ];
+
+  @override
+  void initState() {
+    //setDataBase();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
