@@ -20,15 +20,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
         .catchError((e) => print("error: $e"));
     db
         .execute(
-            "create table categories (cat_id int auto_increment primary key,cat_name varchar(50))")
+            "create table categories (cat_id int AUTO_INCREMENT primary key,cat_name varchar(50))")
         .then((value) async {
       await db.rawInsert("insert into categories values(?,?)", [
         category.length < 1 ? 1 : category.last.catId + 1,
         cat
       ]).catchError((e) => print("error2: $e"));
     }).catchError((e) async {
-      await db.rawInsert("insert into categories values(?,?)",
-          [category.length < 1 ? 1 : category.last.catId + 1, cat]);
+      await db.rawInsert("insert into categories values(?,?)", [
+        category.length < 1 ? 1 : category.last.catId + 1,
+        cat
+      ]);
     }).whenComplete(() async {
       List<Map> data = await db
           .rawQuery("select * from categories")
@@ -53,6 +55,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
         .catchError((e) => print("error: $e"));
     // await db.delete("categories",where: "cat_id != ?",whereArgs:[1] ).then((value) => print("success"));
     List<Map> data = await db.rawQuery("select * from categories");
+    // List<Map> data2 = await db.rawQuery("select count(cat_name) from categories");
+    // print(data2[0]["count(cat_name)"]);
     for (var i in data) {
       category.add(CategoryModel(catId: i["cat_id"], ctaName: i["cat_name"]));
     }

@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:quick_notes/constant/constant.dart';
 import 'package:quick_notes/model/categoryModel.dart';
+import 'package:quick_notes/model/notesModel.dart';
 import 'package:quick_notes/screens/mainScreen/mainScreen.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -43,27 +44,68 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
     for (var i in data) {
       category.add(CategoryModel(catId: i["cat_id"], ctaName: i["cat_name"]));
     }
-    setState(() {
-
-    });
-    await db.execute("create table notes (note_id int primary key,title varchar(50),decs varchar(50),cat_id int, FOREIGN KEY (cat_id) REFERENCES categories(cat_id));").catchError((e)=>print("error1: $e")).then((value) => print("sccess"));
+    setState(() { });
+    await db.execute("create table notes (note_id int AUTO_INCREMENT primary key,title varchar(50),decs varchar(50),cat_id int, FOREIGN KEY (cat_id) REFERENCES categories(cat_id));").catchError((e)=>print("error1: $e")).then((value) => print("sccess"));
     titleText="";
     decsText="";
   }
+  List<NotesModel> note = [];
+  Future<void> setDataBase() async {
+    note.clear();
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    Database db = await openDatabase('${_auth.currentUser!.uid}.db')
+        .catchError((e) => print("error: $e"));
+    //await db.execute("create table talha (name varchar(50),id int);").catchError((e)=>print("error1: $e"));
+    // await db.rawInsert("insert into talha values(?, ?)",["hamza",2]).catchError((e)=>print("error2: $e"));
+    List<Map> data = await db
+        .rawQuery(
+        "select * from notes,categories where notes.cat_id==categories.cat_id")
+        .catchError((e) => print("error3: $e"));
+    for (var i in data) {
+      note.add(NotesModel(
+          cat_id: i["cat_id"].toString(),
+          note_id: i["note_id"].toString(),
+          title: i["title"].toString(),
+          desc: i["decs"].toString(),
+          cat_name: i["cat_name"].toString()));
+      print(i);
+    }
+    setState(() {});
+  }
   getSave(CategoryModel value,String titleText,String descText)async{
-    if(value.catId!=4000){
-      if(titleText.length>0){
-        if(decsText.length>0){
-          int ran=Random(0).nextInt(1000000);
-          await db.rawInsert("insert into notes values(?,?,?,?)",[ran,titleText,descText,value.catId]).catchError((e)=>print("error2: $e")).then((value) => print("done"));
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+    setDataBase().then((s) async{
+      if(value.catId!=4000){
+        if(titleText.length>0){
+          if(decsText.length>0){
+            // int ran=Random(0).nextInt(1000000);
+            await db.rawInsert("insert into notes values(?,?,?,?)",[note.length<1?1:double.parse(note.last.note_id).toInt()+1,titleText,descText,value.catId]).catchError((e)=>print("error2: $e")).then((value) => print("done"));
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
+          }
+          else{
+            showDialog(
+              context: context,
+              builder: (context) => new AlertDialog(
+                title: new Text('Description is Empty'),
+                content: new Text('Please Add a Description First'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: new Text(
+                      'Ok',
+                      style: TextStyle(color: Color(0xff407BFF)),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
         }
         else{
           showDialog(
             context: context,
             builder: (context) => new AlertDialog(
-              title: new Text('Description is Empty'),
-              content: new Text('Please Add a Description First'),
+              title: new Text('Title is Empty'),
+              content: new Text('Please Add a title First'),
               actions: <Widget>[
                 new FlatButton(
                   onPressed: () => Navigator.of(context).pop(),
@@ -81,8 +123,8 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
         showDialog(
           context: context,
           builder: (context) => new AlertDialog(
-            title: new Text('Title is Empty'),
-            content: new Text('Please Add a title First'),
+            title: new Text('Category is Empty'),
+            content: new Text('Please select category first'),
             actions: <Widget>[
               new FlatButton(
                 onPressed: () => Navigator.of(context).pop(),
@@ -95,25 +137,8 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
           ),
         );
       }
-    }
-    else{
-      showDialog(
-        context: context,
-        builder: (context) => new AlertDialog(
-          title: new Text('Category is Empty'),
-          content: new Text('Please select category first'),
-          actions: <Widget>[
-            new FlatButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: new Text(
-                'Ok',
-                style: TextStyle(color: Color(0xff407BFF)),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
+    });
+
   }
 
   late CategoryModel value;

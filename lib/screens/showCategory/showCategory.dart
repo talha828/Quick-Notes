@@ -19,6 +19,9 @@ class _ShowCategoryScreenState extends State<ShowCategoryScreen> {
     FirebaseAuth _auth = FirebaseAuth.instance;
     Database db = await openDatabase('${_auth.currentUser!.uid}.db')
         .catchError((e) => print("error: $e"));
+   // var dd=await db.query("select count(title) from notes,categories where notes.cat_id==categories.cat_id group by cat_id");
+    //var dd=await db.query("notes",columns: ["count(title)",],groupBy: "notes.cat_id" );
+    //print(dd);
     // await db.delete("categories",where: "cat_id != ?",whereArgs:[1] ).then((value) => print("success"));
     List<Map> data = await db.rawQuery("select * from categories");
     for (var i in data) {
