@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:quick_notes/screens/categoryScreen/categoryScreen.dart';
 import 'package:quick_notes/screens/loginScreen/loginScreen.dart';
 import 'package:quick_notes/screens/mainScreen/mainScreen.dart';
 import 'package:quick_notes/screens/signUpScreen/signUpScreen.dart';

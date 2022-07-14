@@ -16,13 +16,14 @@ class QuickSearch extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),),
         child: TextField(
           textAlignVertical: TextAlignVertical.center,
-          onTap: onTap,
           onChanged: onChange,
           decoration: InputDecoration(
-              suffixIcon: Icon(Icons.search,color: Color(0xff407BFF),),
+              suffixIcon: InkWell(
+                  onTap:onTap,
+                  child: Icon(Icons.search,color: Color(0xff407BFF),)),
               fillColor: Color(0xffDCEAFF),
               contentPadding: EdgeInsets.symmetric(horizontal: 20),
-              hintText: "Search",
+              hintText: "Search Title",
               focusedBorder: InputBorder.none,
               enabledBorder: InputBorder.none),
         ),
