@@ -22,13 +22,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
-  var fill1= false, fill2= false, fill3 = false;
-  bool isLoading=false;
-  void setLoading(bool value){
+  var fill1 = false, fill2 = false, fill3 = false;
+  bool isLoading = false;
+  void setLoading(bool value) {
     setState(() {
-      isLoading=value;
+      isLoading = value;
     });
   }
+
   void signUpAccount(String email, String password, String confirmPassword) {
     FocusScope.of(context).requestFocus(FocusNode());
     setLoading(true);
@@ -61,22 +62,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ],
                 ),
               );
-                })
-                .then(
-                  (value)async {
-                    SharedPreferences pref=await SharedPreferences.getInstance();
-                    pref.setString("email", email);
-                    pref.setString("password",password);
+            }).then(
+              (value) async {
+                SharedPreferences pref = await SharedPreferences.getInstance();
+                pref.setString("email", email);
+                pref.setString("password", password);
 
-                    setLoading(false);
-                    Navigator.push(
-                      context,
-                      PageTransition(
-                          child: MainScreen(),
-                          type: PageTransitionType.rightToLeftPop,
-                          childCurrent: SignUpScreen(),
-                          duration: Duration(seconds: 1)));},
-                );
+                setLoading(false);
+                Navigator.push(
+                    context,
+                    PageTransition(
+                        child: MainScreen(),
+                        type: PageTransitionType.rightToLeftPop,
+                        childCurrent: SignUpScreen(),
+                        duration: Duration(seconds: 1)));
+              },
+            );
           } else {
             setLoading(false);
             showDialog(
@@ -161,107 +162,108 @@ class _SignUpScreenState extends State<SignUpScreen> {
     var width = media.width;
     var height = media.height;
     return Scaffold(
-      body: Stack(
-        alignment: Alignment.center,
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(
-                  height: 50,
+        body: Stack(
+      alignment: Alignment.center,
+      children: [
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(
+                height: 50,
+              ),
+              Container(
+                child: Text(
+                  "Create Your Account",
+                  style: loginText,
                 ),
-                Container(
-                  child: Text(
-                    "Create Your Account",
-                    style: loginText,
-                  ),
-                ),
-                Container(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Fill the details below to create",
-                        style: welcomeDescribeText,
-                      ),
-                      Text(
-                        "your account",
-                        style: welcomeDescribeText,
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                QuickTextField(
-                  text: "Email",
-                  controller: email,
-                  fill: fill1,
-                  obscureText: false,
-                  onChange: (value) {
-                    email = TextEditingController(text: value);
-                    fill1 = email.text.length > 0 ? true : false;
-                    setState(() {});
-                  },
-                ),
-                QuickTextField(
-                  text: "Password",
-                  controller: password,
-                  obscureText: true,
-                  fill: fill2,
-                  onChange: (value) {
-                    password = TextEditingController(text: value);
-                    fill2 = password.text.length > 0 ? true : false;
-                    setState(() {});
-                  },
-                ),
-                QuickTextField(
-                  text: "Confirm Password",
-                  controller: confirmPassword,
-                  fill: fill3,
-                  obscureText: true,
-                  onChange: (value) {
-                    confirmPassword = TextEditingController(text: value);
-                    fill3 = confirmPassword.text.length > 0 ? true : false;
-                    setState(() {});
-                  },
-                ),
-                QuickButton(
-                  buttonText: "Sign Up",
-                  onTap: () => signUpAccount(
-                      email.text, password.text, confirmPassword.text),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+              ),
+              Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text("Already have an account? ", style: notHaveAccountText),
-                    InkWell(
-                        onTap: () => Navigator.push(
-                            context,
-                            PageTransition(
-                                child: LoginScreen(),
-                                type: PageTransitionType.rightToLeftPop,
-                                childCurrent: SignUpScreen(),
-                                duration: Duration(seconds: 1))),
-                        child: Text("Login in", style: signUp)),
+                    Text(
+                      "Fill the details below to create",
+                      style: welcomeDescribeText,
+                    ),
+                    Text(
+                      "your account",
+                      style: welcomeDescribeText,
+                    ),
                   ],
-                )
-              ],
-            ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              QuickTextField(
+                text: "Email",
+                controller: email,
+                fill: fill1,
+                obscureText: false,
+                onChange: (value) {
+                  email = TextEditingController(text: value);
+                  fill1 = email.text.length > 0 ? true : false;
+                  setState(() {});
+                },
+              ),
+              QuickTextField(
+                text: "Password",
+                controller: password,
+                obscureText: true,
+                fill: fill2,
+                onChange: (value) {
+                  password = TextEditingController(text: value);
+                  fill2 = password.text.length > 0 ? true : false;
+                  setState(() {});
+                },
+              ),
+              QuickTextField(
+                text: "Confirm Password",
+                controller: confirmPassword,
+                fill: fill3,
+                obscureText: true,
+                onChange: (value) {
+                  confirmPassword = TextEditingController(text: value);
+                  fill3 = confirmPassword.text.length > 0 ? true : false;
+                  setState(() {});
+                },
+              ),
+              QuickButton(
+                buttonText: "Sign Up",
+                onTap: () => signUpAccount(
+                    email.text, password.text, confirmPassword.text),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("Already have an account? ", style: notHaveAccountText),
+                  InkWell(
+                      onTap: () => Navigator.push(
+                          context,
+                          PageTransition(
+                              child: LoginScreen(),
+                              type: PageTransitionType.rightToLeftPop,
+                              childCurrent: SignUpScreen(),
+                              duration: Duration(seconds: 1))),
+                      child: Text("Login in", style: signUp)),
+                ],
+              )
+            ],
           ),
-
-          isLoading?Container(
-            alignment: Alignment.center,
-            color: Colors.black45,
-            width: width,
-            height: height,
-            child: CircularProgressIndicator(),):Container()
-        ],
-      )
-    );
+        ),
+        isLoading
+            ? Container(
+                alignment: Alignment.center,
+                color: Colors.black45,
+                width: width,
+                height: height,
+                child: CircularProgressIndicator(),
+              )
+            : Container()
+      ],
+    ));
   }
 }

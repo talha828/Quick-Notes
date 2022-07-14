@@ -173,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     setState(() {});
   }
+
   Future<void> onSearch() async {
     note.clear();
     FirebaseAuth _auth = FirebaseAuth.instance;
@@ -229,26 +230,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(8.0),
                 child: Row(
                   children: [
-                    Image.asset(
-                      "assets/notes.png",
-                      scale: 2.5,
-                    ),
-                    SizedBox(
-                      width: 25,
-                    ),
-                    Text(
-                      "Notes",
-                      style: TextStyle(
-                        fontFamily: "Poppins",
-                      ),
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
                     Icon(
                       Icons.add,
                       color: Color(0xff407BFF),
@@ -262,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                               builder: (context) => CreateNotesScreen())),
                       child: Text(
-                        "Create Notes",
+                        "Create Note",
                         style: TextStyle(
                           fontFamily: "Poppins",
                         ),
@@ -271,7 +252,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
@@ -293,10 +273,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 25,
                     ),
                     Text(
-                      "Category",
+                      "categories",
                       style: TextStyle(
-                          fontFamily: "Poppins", fontWeight: FontWeight.bold),
-                    )
+                        fontFamily: "Poppins",
+                        fontWeight: FontWeight.normal,
+                        color: Colors.grey,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -410,14 +393,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Container(
                     padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
                     child: Text(
-                      "Hello Quickie",
+                      "Hello!",
                       style: loginText,
                     ),
                   ),
             note.length > 0
                 ? Container()
                 : Text(
-                    "Let get Started with notes",
+                    "Let's get Started with notes",
                     style: welcomeDescribeText,
                   ),
             note.length > 0
@@ -443,12 +426,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            "You have not create any ",
+                            "You have not created any ",
                             style: welcomeDescribeText,
                             textAlign: TextAlign.center,
                           ),
                           Text(
-                            "Note yet",
+                            "Notes yet",
                             style: welcomeDescribeText,
                             textAlign: TextAlign.center,
                           ),
@@ -488,46 +471,57 @@ class Notes extends StatelessWidget {
           padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
               color: Color(0xffDCEAFF),
-              borderRadius: BorderRadius.circular(5),
+              borderRadius: BorderRadius.circular(15),
               border: Border.all(color: Colors.white)),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                      width: 150,
-                      child: Text(
-                        note.title.length>13?note.title.substring(0,13)+"...":note.title,
-                        style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
-                        fontFamily: "Poppins"),
-                      )),
-                  Container(
-                      decoration: BoxDecoration(
-                          color: themeColor1,
-                          borderRadius: BorderRadius.circular(5)),
-                      padding:
-                          EdgeInsets.symmetric(vertical: 7, horizontal: 20),
-                      child: Text(
-                        note.cat_name,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: "Poppins"),
-                      )),
-                ],
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                note.desc,
-                style: TextStyle(color: Colors.black54),
-              ),
-            ],
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 11),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                    width: 150,
+                    child: Text(
+                      note.title.length > 13
+                          ? note.title.substring(0, 13) + "..."
+                          : note.title,
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20,
+                          fontFamily: "Poppins"),
+                    )),
+                SizedBox(
+                  height: 5,
+                ),
+                Text(
+                  note.desc,
+                  style: TextStyle(
+                    color: Colors.grey[500],
+                    fontWeight: FontWeight.w400,
+                    fontSize: 11,
+                    fontFamily: "Poppins",
+                    height: 1.8,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 3,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Container(
+                    decoration: BoxDecoration(
+                        color: themeColor1,
+                        borderRadius: BorderRadius.circular(3)),
+                    padding: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+                    child: Text(
+                      note.cat_name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: "Poppins"),
+                    )),
+              ],
+            ),
           ),
         ),
       ),

@@ -27,10 +27,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
         cat
       ]).catchError((e) => print("error2: $e"));
     }).catchError((e) async {
-      await db.rawInsert("insert into categories values(?,?)", [
-        category.length < 1 ? 1 : category.last.catId + 1,
-        cat
-      ]);
+      await db.rawInsert("insert into categories values(?,?)",
+          [category.length < 1 ? 1 : category.last.catId + 1, cat]);
     }).whenComplete(() async {
       List<Map> data = await db
           .rawQuery("select * from categories")
@@ -143,11 +141,17 @@ class _CategoryScreenState extends State<CategoryScreen> {
                         shrinkWrap: true,
                         children: category
                             .map((e) => Dismissible(
-                                  onDismissed: (value) async{
+                                  onDismissed: (value) async {
                                     FirebaseAuth _auth = FirebaseAuth.instance;
-                                    Database db = await openDatabase('${_auth.currentUser!.uid}.db')
-                                        .catchError((error) => print("error: $error"));
-                                     await db.delete("categories",where: "cat_id = ?",whereArgs:[e.catId] ).then((value) => print("success"));
+                                    Database db = await openDatabase(
+                                            '${_auth.currentUser!.uid}.db')
+                                        .catchError(
+                                            (error) => print("error: $error"));
+                                    await db.delete("categories",
+                                        where: "cat_id = ?",
+                                        whereArgs: [
+                                          e.catId
+                                        ]).then((value) => print("success"));
                                   },
                                   key: Key(e.ctaName),
                                   child: TextField(

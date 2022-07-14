@@ -19,7 +19,7 @@ class _ShowCategoryScreenState extends State<ShowCategoryScreen> {
     FirebaseAuth _auth = FirebaseAuth.instance;
     Database db = await openDatabase('${_auth.currentUser!.uid}.db')
         .catchError((e) => print("error: $e"));
-   // var dd=await db.query("select count(title) from notes,categories where notes.cat_id==categories.cat_id group by cat_id");
+    // var dd=await db.query("select count(title) from notes,categories where notes.cat_id==categories.cat_id group by cat_id");
     //var dd=await db.query("notes",columns: ["count(title)",],groupBy: "notes.cat_id" );
     //print(dd);
     // await db.delete("categories",where: "cat_id != ?",whereArgs:[1] ).then((value) => print("success"));
@@ -52,7 +52,7 @@ class _ShowCategoryScreenState extends State<ShowCategoryScreen> {
         ),
       ),
       body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 15),
+        padding: EdgeInsets.symmetric(horizontal: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -60,31 +60,45 @@ class _ShowCategoryScreenState extends State<ShowCategoryScreen> {
               children: [
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-                  child: Text(
-                    "Category",
-                    style: loginText,
-                  ),
+                  child: Text("Category",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: "Poppins",
+                        fontSize: 28,
+                        fontWeight: FontWeight.w500,
+                      )),
                 ),
               ],
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             category.length > 0
                 ? Container(
                     child: ListView.separated(
-                      shrinkWrap: true,
+                        shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return InkWell(
-                              onTap: ()=>Navigator.push(context, MaterialPageRoute(builder: (context)=>SpecificNotes(categoryModel: category[index]))),
+                            onTap: () => Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => SpecificNotes(
+                                        categoryModel: category[index]))),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: Color(0xffDCEAFF),
-                                borderRadius: BorderRadius.circular(5)
-                              ),
+                                  color: Colors.grey[100],
+                                  borderRadius: BorderRadius.circular(10)),
                               padding: EdgeInsets.symmetric(vertical: 20),
                               alignment: Alignment.center,
-                              child: Text(category[index].ctaName,style: TextStyle(
-                                fontFamily: "Poppins",fontSize: 20,fontWeight: FontWeight.bold
-                              ),),
+                              child: Text(
+                                category[index].ctaName,
+                                style: TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.normal,
+                                  color: themeColor1,
+                                ),
+                              ),
                             ),
                           );
                         },

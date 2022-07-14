@@ -15,16 +15,15 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-
-  checkUserLogin()async{
-    SharedPreferences pref=await SharedPreferences.getInstance();
-    var name=pref.getString("email");
-    var passwords=pref.getString("password");
+  checkUserLogin() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var name = pref.getString("email");
+    var passwords = pref.getString("password");
     print("password: $passwords email:$name");
-    if(name!=null && passwords != null){
+    if (name != null && passwords != null) {
       FirebaseAuth _auth = FirebaseAuth.instance;
-      _auth.signInWithEmailAndPassword(
-          email: name, password: passwords)
+      _auth
+          .signInWithEmailAndPassword(email: name, password: passwords)
           .catchError((e) {
         alert(
           context,
@@ -32,23 +31,27 @@ class _SplashScreenState extends State<SplashScreen> {
           content: Text('Please check your internet connection'),
           textOK: Text('OK'),
         );
-      })
-          .then(
-            (value) {
+      }).then(
+        (value) {
           Navigator.push(
               context,
               PageTransition(
                   child: MainScreen(),
                   type: PageTransitionType.leftToRight,
                   childCurrent: SplashScreen(),
-                  duration: Duration(seconds: 1)));},
+                  duration: Duration(seconds: 1)));
+        },
       );
+    } else {
+      Navigator.push(
+          context,
+          PageTransition(
+              child: WelcomeScreen(),
+              type: PageTransitionType.leftToRight,
+              duration: Duration(seconds: 1)));
     }
-    else{
-      Navigator.push(context, PageTransition(child: WelcomeScreen(), type: PageTransitionType.leftToRight,duration: Duration(seconds: 1)));
-    }
-
   }
+
   @override
   void initState() {
     checkUserLogin();
@@ -56,12 +59,15 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   @override
-  Widget build(BuildContext context){
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body:Center(
-        child: Image.asset("assets/splash_logo.png",scale: 2,),
-      ) ,
+      body: Center(
+        child: Image.asset(
+          "assets/splash_logo.png",
+          scale: 2,
+        ),
+      ),
     );
   }
 }

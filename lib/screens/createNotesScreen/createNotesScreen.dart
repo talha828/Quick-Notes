@@ -16,11 +16,8 @@ class CreateNotesScreen extends StatefulWidget {
 }
 
 class _CreateNotesScreenState extends State<CreateNotesScreen> {
-
-
-
-  TextEditingController title=TextEditingController();
-  TextEditingController decs=TextEditingController();
+  TextEditingController title = TextEditingController();
+  TextEditingController decs = TextEditingController();
   List<CategoryModel> category = [
     CategoryModel(catId: 4000, ctaName: "Select Category"),
   ];
@@ -36,19 +33,26 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
     }
     setState(() {});
   }
-  late Database  db;
-  open()async{
-    FirebaseAuth _auth= FirebaseAuth.instance;
-      db = await openDatabase('${_auth.currentUser!.uid}.db').catchError((e)=>print("error: $e"));
+
+  late Database db;
+  open() async {
+    FirebaseAuth _auth = FirebaseAuth.instance;
+    db = await openDatabase('${_auth.currentUser!.uid}.db')
+        .catchError((e) => print("error: $e"));
     List<Map> data = await db.rawQuery("select * from categories");
     for (var i in data) {
       category.add(CategoryModel(catId: i["cat_id"], ctaName: i["cat_name"]));
     }
-    setState(() { });
-    await db.execute("create table notes (note_id int AUTO_INCREMENT primary key,title varchar(50),decs varchar(50),cat_id int, FOREIGN KEY (cat_id) REFERENCES categories(cat_id));").catchError((e)=>print("error1: $e")).then((value) => print("sccess"));
-    titleText="";
-    decsText="";
+    setState(() {});
+    await db
+        .execute(
+            "create table notes (note_id int AUTO_INCREMENT primary key,title varchar(50),decs varchar(50),cat_id int, FOREIGN KEY (cat_id) REFERENCES categories(cat_id));")
+        .catchError((e) => print("error1: $e"))
+        .then((value) => print("sccess"));
+    titleText = "";
+    decsText = "";
   }
+
   List<NotesModel> note = [];
   Future<void> setDataBase() async {
     note.clear();
@@ -59,7 +63,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
     // await db.rawInsert("insert into talha values(?, ?)",["hamza",2]).catchError((e)=>print("error2: $e"));
     List<Map> data = await db
         .rawQuery(
-        "select * from notes,categories where notes.cat_id==categories.cat_id")
+            "select * from notes,categories where notes.cat_id==categories.cat_id")
         .catchError((e) => print("error3: $e"));
     for (var i in data) {
       note.add(NotesModel(
@@ -72,16 +76,27 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
     }
     setState(() {});
   }
-  getSave(CategoryModel value,String titleText,String descText)async{
-    setDataBase().then((s) async{
-      if(value.catId!=4000){
-        if(titleText.length>0){
-          if(decsText.length>0){
+
+  getSave(CategoryModel value, String titleText, String descText) async {
+    setDataBase().then((s) async {
+      if (value.catId != 4000) {
+        if (titleText.length > 0) {
+          if (decsText.length > 0) {
             // int ran=Random(0).nextInt(1000000);
-            await db.rawInsert("insert into notes values(?,?,?,?)",[note.length<1?1:double.parse(note.last.note_id).toInt()+1,titleText,descText,value.catId]).catchError((e)=>print("error2: $e")).then((value) => print("done"));
-            Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen()));
-          }
-          else{
+            await db
+                .rawInsert("insert into notes values(?,?,?,?)", [
+                  note.length < 1
+                      ? 1
+                      : double.parse(note.last.note_id).toInt() + 1,
+                  titleText,
+                  descText,
+                  value.catId
+                ])
+                .catchError((e) => print("error2: $e"))
+                .then((value) => print("done"));
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => MainScreen()));
+          } else {
             showDialog(
               context: context,
               builder: (context) => new AlertDialog(
@@ -99,8 +114,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
               ),
             );
           }
-        }
-        else{
+        } else {
           showDialog(
             context: context,
             builder: (context) => new AlertDialog(
@@ -118,8 +132,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
             ),
           );
         }
-      }
-      else{
+      } else {
         showDialog(
           context: context,
           builder: (context) => new AlertDialog(
@@ -138,7 +151,6 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
         );
       }
     });
-
   }
 
   late CategoryModel value;
@@ -151,6 +163,7 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
     value = category.first;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -160,7 +173,10 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
         elevation: 0.0,
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: Icon(Icons.arrow_back_ios_new,color: Colors.grey,),
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.grey,
+          ),
         ),
       ),
       body: Container(
@@ -170,82 +186,100 @@ class _CreateNotesScreenState extends State<CreateNotesScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                category.length<2?Container(
-        padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.grey)
-          ),
-                child: Row(
-                  children: [
-                    Text("Select Category",style: TextStyle(color: Colors.grey),),
-                    SizedBox(width: 10,),
-                    Icon(Icons.arrow_drop_down,color: Colors.grey)
-                  ],
-                ),):Container(
-                  padding: EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: Colors.grey)
-                  ),
-                  width: 150,
-                  height: 40,
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton<CategoryModel>(
-                      disabledHint: Text("select Category"),
-                      isExpanded: true,
-                        onChanged: (item){
-                          setState(() {
-                            value=item!;
-                          });
-                        },
-                        value: value,
-                        items: category
-                            .map((e) => DropdownMenuItem(
-                                value: e, child: FittedBox(child: Text(e.ctaName))))
-                            .toList()),
-                  ),
-                ),
+                category.length < 2
+                    ? Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(11),
+                            border: Border.all(color: Colors.grey)),
+                        child: Row(
+                          children: [
+                            Text(
+                              "Select Category",
+                              style: TextStyle(color: Colors.grey),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Icon(Icons.arrow_drop_down, color: Colors.grey)
+                          ],
+                        ),
+                      )
+                    : Container(
+                        padding: EdgeInsets.symmetric(horizontal: 10),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(11),
+                            border: Border.all(color: Colors.grey)),
+                        width: 150,
+                        height: 40,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<CategoryModel>(
+                              disabledHint: Text("Select Category"),
+                              isExpanded: true,
+                              onChanged: (item) {
+                                setState(() {
+                                  value = item!;
+                                });
+                              },
+                              value: value,
+                              items: category
+                                  .map((e) => DropdownMenuItem(
+                                      value: e,
+                                      child: FittedBox(child: Text(e.ctaName))))
+                                  .toList()),
+                        ),
+                      ),
                 InkWell(
-                  onTap: ()=>getSave(value, titleText, decsText),
+                  onTap: () => getSave(value, titleText, decsText),
                   child: Padding(
                     padding: const EdgeInsets.only(right: 10),
-                    child: Text("Save",style: TextStyle(color: themeColor1,fontFamily: "Poppins",fontSize: 20),),
+                    child: Text(
+                      "Save",
+                      style: TextStyle(
+                          color: themeColor1,
+                          fontFamily: "Poppins",
+                          fontWeight: FontWeight.w500,
+                          fontSize: 20),
+                    ),
                   ),
                 )
               ],
             ),
-            SizedBox(height: 20,),
+            SizedBox(
+              height: 20,
+            ),
             TextField(
               controller: title,
               decoration: InputDecoration(
-                hintText: "Title...",
-                hintStyle: TextStyle(
-                  fontSize: 20,
-                  fontFamily: "Poppins",
-                 // color: Colors.black,
-                  fontWeight: FontWeight.bold
-                )
-              ),
-              onChanged: (value){
-                titleText=value.trim();
-                setState(() {
-
-                });
+                  hintText: "Title",
+                  hintStyle: TextStyle(
+                    fontSize: 24,
+                    fontFamily: "Poppins",
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  )),
+              onChanged: (value) {
+                titleText = value.trim();
+                setState(() {});
               },
             ),
             TextField(
               controller: decs,
+              keyboardType: TextInputType.multiline,
+              minLines: null,
+              maxLines: null,
               decoration: InputDecoration(
-                enabledBorder: InputBorder.none,
-                hintText: "type your note here....",
+                  enabledBorder: InputBorder.none,
+                  hintText: "Type your note here...",
                   hintStyle: TextStyle(
-                  fontFamily: "Poppins",
-                  // color: Colors.black,
-              )
-              ),
-              onChanged: (value){
-                decsText=value.trim();
+                    fontSize: 17,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: "Poppins",
+                    color: Colors.grey,
+                  )),
+              onChanged: (value) {
+                decsText = value.trim();
                 setState(() {});
               },
             )

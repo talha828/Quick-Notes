@@ -13,7 +13,7 @@ class WelcomeScreen extends StatefulWidget {
 }
 
 class _WelcomeScreenState extends State<WelcomeScreen> {
-  String buttonText="Get Started";
+  String buttonText = "Get Started";
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,15 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                 ],
               ),
             ),
-            QuickButton(buttonText: buttonText,onTap: ()=>    Navigator.push(context, PageTransition(child: LoginScreen(), type: PageTransitionType.bottomToTopPop,childCurrent:WelcomeScreen(),duration: Duration(seconds: 1))),
+            QuickButton(
+              buttonText: buttonText,
+              onTap: () => Navigator.push(
+                  context,
+                  PageTransition(
+                      child: LoginScreen(),
+                      type: PageTransitionType.bottomToTopPop,
+                      childCurrent: WelcomeScreen(),
+                      duration: Duration(seconds: 1))),
             ),
           ],
         ),
@@ -66,5 +74,3 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
     );
   }
 }
-
-

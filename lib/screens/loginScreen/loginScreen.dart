@@ -23,75 +23,76 @@ class _LoginScreenState extends State<LoginScreen> {
   TextEditingController password = TextEditingController();
   bool fill1 = false;
   bool fill2 = false;
-  bool isLoading=false;
-  void setLoading(bool value){
+  bool isLoading = false;
+  void setLoading(bool value) {
     setState(() {
-      isLoading=value;
+      isLoading = value;
     });
   }
+
   void loginAccount(String email, String password) {
     FocusScope.of(context).requestFocus(FocusNode());
     setLoading(true);
     bool emailValid = RegExp(
-        r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(email);
     if (email.length > 0 && password.length > 0) {
-        if (password.length > 5 && password != null) {
-          if (emailValid) {
-            FirebaseAuth _auth = FirebaseAuth.instance;
-            _auth.signInWithEmailAndPassword(
-                email: email, password: password)
-                .catchError((e) {
-              setLoading(false);
-              showDialog(
-                context: context,
-                builder: (context) => new AlertDialog(
-                  title: new Text('Something went wrong?'),
-                  content: new Text('Please check your internet connection'),
-                  actions: <Widget>[
-                    new FlatButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      child: new Text(
-                        'Ok',
-                        style: TextStyle(color: Color(0xff407BFF)),
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            })
-                .then(
-                  (value)async {
-                setLoading(false);
-                SharedPreferences pref=await SharedPreferences.getInstance();
-                pref.setString("email", email);
-                pref.setString("password",password);
-                Navigator.push(
-                    context,
-                    PageTransition(
-                        child: MainScreen(),
-                        type: PageTransitionType.rightToLeftPop,
-                        childCurrent: SignUpScreen(),
-                        duration: Duration(seconds: 1)));},
-            );
-          } else {
+      if (password.length > 5 && password != null) {
+        if (emailValid) {
+          FirebaseAuth _auth = FirebaseAuth.instance;
+          _auth
+              .signInWithEmailAndPassword(email: email, password: password)
+              .catchError((e) {
             setLoading(false);
-            alert(
-              context,
-              title: Text('Email is not valid'),
-              content: Text('Please check your email'),
-              textOK: Text('OK'),
+            showDialog(
+              context: context,
+              builder: (context) => new AlertDialog(
+                title: new Text('Something went wrong?'),
+                content: new Text('Please check your internet connection'),
+                actions: <Widget>[
+                  new FlatButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: new Text(
+                      'Ok',
+                      style: TextStyle(color: Color(0xff407BFF)),
+                    ),
+                  ),
+                ],
+              ),
             );
-          }
+          }).then(
+            (value) async {
+              setLoading(false);
+              SharedPreferences pref = await SharedPreferences.getInstance();
+              pref.setString("email", email);
+              pref.setString("password", password);
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: MainScreen(),
+                      type: PageTransitionType.rightToLeftPop,
+                      childCurrent: SignUpScreen(),
+                      duration: Duration(seconds: 1)));
+            },
+          );
         } else {
           setLoading(false);
           alert(
             context,
-            title: Text('Password is not valid'),
-            content: Text('Please check your Password'),
+            title: Text('Email is not valid'),
+            content: Text('Please check your email'),
             textOK: Text('OK'),
           );
         }
+      } else {
+        setLoading(false);
+        alert(
+          context,
+          title: Text('Password is not valid'),
+          content: Text('Please check your Password'),
+          textOK: Text('OK'),
+        );
+      }
     } else {
       setLoading(false);
       alert(
@@ -102,6 +103,7 @@ class _LoginScreenState extends State<LoginScreen> {
       );
     }
   }
+
   @override
   void dispose() {
     email.clear();
@@ -135,9 +137,9 @@ class _LoginScreenState extends State<LoginScreen> {
               fill: fill1,
               onChange: (value) {
                 email = TextEditingController(text: value);
-                fill1=email.text.length>0?true:false;
+                fill1 = email.text.length > 0 ? true : false;
                 setState(() {});
-                },
+              },
             ),
             QuickTextField(
               text: "Password",
@@ -146,7 +148,7 @@ class _LoginScreenState extends State<LoginScreen> {
               fill: fill2,
               onChange: (value) {
                 password = TextEditingController(text: value);
-                fill2=password.text.length>0?true:false;
+                fill2 = password.text.length > 0 ? true : false;
                 setState(() {});
               },
             ),
@@ -161,21 +163,20 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             QuickButton(
               buttonText: "Login",
-              onTap: ()=>loginAccount(email.text, password.text),
+              onTap: () => loginAccount(email.text, password.text),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Don`t have an account? ",
-                  style: notHaveAccountText
-                ),
+                Text("Don`t have an account? ", style: notHaveAccountText),
                 InkWell(
-                    onTap: ()=>     Navigator.push(context, PageTransition(child: SignUpScreen(), type: PageTransitionType.leftToRight,duration: Duration(seconds: 1))),
-                    child: Text(
-                      "Sign up",
-                      style: signUp
-                    )),
+                    onTap: () => Navigator.push(
+                        context,
+                        PageTransition(
+                            child: SignUpScreen(),
+                            type: PageTransitionType.leftToRight,
+                            duration: Duration(seconds: 1))),
+                    child: Text("Sign up", style: signUp)),
               ],
             )
           ],
